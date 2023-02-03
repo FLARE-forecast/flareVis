@@ -8,7 +8,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 plot_temp <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-5,35)) {
 
   # Generate labels for plots
