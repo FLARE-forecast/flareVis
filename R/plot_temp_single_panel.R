@@ -1,4 +1,15 @@
-plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-5,35)) {
+#' Temperature plot with all depths on a single panel
+#'
+#' @param data data frame of scores
+#' @param depths vector of depths to be facets
+#' @param tzone time zone for datetime in plot
+#' @param ylims vector of c(lower,upper) bounds of temperature on plot
+#' @param site_name name of site
+#'
+#' @return
+#' @export
+#'
+plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-5,35), site_name = ""){
 
   # Fix dates and rename columns to match plotting code
   curr_tibble <- data |>
