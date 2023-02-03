@@ -2,17 +2,21 @@
 
 Shared plots for visualizing FLARE output
 
-All new functions should use the following argument convention
+## Design guide
 
-`data` is the first argument and is the data frame being plotted.  It should be already filter to the site and reference_datetime.  It can have multiple depths. 
+All new functions should use the following argument convention:
 
-`depths` is the second argument and is a vector of the depths to be plotted. 
+- `data` is the first argument and is the data frame being plotted.  It should be already filtered to the site and reference_datetime.  It can have multiple depths. No default.
 
-`tzone` is the third argument and it is the time zone for the x-axis, if it is a time-series plot. Default is "America/New_York"
+- `depths` is the second argument and is a vector of the depths to be plotted. Defaults to `0.5`
 
-`ylims` is the fourth argument and is a two element vector of the lower and upper range of the y-axis.  Default to `c(-5,35)`
+- `tzone` is the third argument and it is the time zone for the x-axis, if it is a time-series plot. Default is `"America/New_York"`
 
-`site_name` is the full name of a site if the plot includes it in the title
+- `ylims` is the fourth argument and is a two element vector of the lower and upper range of the y-axis.  Defaults to `c(-5,35)`
+
+- `site_name` is the full name of a site if the plot includes it in the title.  Defaults to blank `""`
+
+- As we add more plots, we will add more conventions here
 
 ## Example
 
