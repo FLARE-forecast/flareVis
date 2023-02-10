@@ -21,7 +21,7 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
            observed = observation, forecast_start_day = reference_datetime)
 
   ggplot2::ggplot(curr_tibble, ggplot2::aes(x = as.Date(date))) +
-    ggplot2::ylim(y_axis_limits) +
+    ggplot2::ylim(ylims) +
     ggplot2::geom_line(ggplot2::aes(y = forecast_mean, color = as.factor(depth)), size = 0.5)+
     ggplot2::geom_ribbon(ggplot2::aes(ymin = forecast_lower_90, ymax = forecast_upper_90,
                                       fill = as.factor(depth)),
