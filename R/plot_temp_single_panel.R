@@ -38,11 +38,11 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
     ggplot2::theme_light() +
     ggplot2::scale_fill_manual(name = "Depth (m)",
                                values = c("#D55E00", '#009E73', '#0072B2'),
-                               labels = as.character(depth_values)) +
+                               labels = as.character(depths)) +
     #labels = c('0.1', '5.0', '10.0')) +
     ggplot2::scale_color_manual(name = "Depth (m)",
                                 values = c("#D55E00", '#009E73', '#0072B2'),
-                                labels = as.character(depth_values)) +
+                                labels = as.character(depths)) +
     #labels = c('0.1', '5.0', '10.0')) +
     ggplot2::scale_x_date(date_breaks = '4 days',
                           date_labels = '%b %d\n%a',
