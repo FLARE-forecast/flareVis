@@ -4,7 +4,7 @@
 #' @param plot_depth depth for the data used in the plot
 #' @param site site to be used for the plot
 #'
-temp_gauge_index <- function(met_data, flare_data, forecast_date, plot_depth, site){
+temp_index_gauge <- function(met_data, flare_data, forecast_date, plot_depth, site){
 
   noaa_data <- met_data |>
     dplyr::filter(site_id == site,
