@@ -1,11 +1,19 @@
-#' @param noaa_noon_df dataframe that contains noaa forecasts with a single prediction per day
-#' @param variable_name variabe that is being forecasted
+#' NOAA member forecasts plot
+#' @param data data frame to be plotted
+#' @param depths vector of depths to be facets
+#' @param tzone time zone for datetime in plot
+#' @param ylims vector of c(lower,upper) bounds of temperature on plot
+#' @param variable_name variable that is being forecasted
+#'
+#' @return
+#' @export
+#'
 
-noaa_forecasts <- function(noaa_noon_df, variable_name){
+noaa_forecasts <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-4,4), variable_name= NA){
 
   if (variable_name == 'air_temperature'){
 
-    p <- ggplot(noaa_noon_df, aes(x=datetime,y=prediction, group = parameter)) +
+    p <- ggplot(data, aes(x=datetime,y=prediction, group = parameter)) +
       geom_line() +
       ylab('Temperature (deg F)') +
       xlab('Date') +
@@ -17,7 +25,7 @@ noaa_forecasts <- function(noaa_noon_df, variable_name){
 
   } else {
 
-    p <- ggplot(noaa_noon_df, aes(x=datetime,y=prediction, group = parameter)) +
+    p <- ggplot(data, aes(x=datetime,y=prediction, group = parameter)) +
       geom_line()
   }
 

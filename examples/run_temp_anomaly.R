@@ -84,4 +84,16 @@ temp_anomaly_lower <- temp_clim %>%
          DateTime <= '2020-08-01',
          Depth == 10)
 
-temp_anom_fig <- temp_anomaly_plot(anomaly_df = temp_anomaly_upper)
+temp_anom_fig <- temp_anomaly(data = temp_anomaly_upper)
+
+temp_anom_fig
+
+## try to get current data from bucket to use in comparison to historical data
+
+forecast_s3 <- arrow::s3_bucket('forecasts/parquet', endpoint_override = 's3.flare-forecast.org', anonymous = TRUE)
+
+sunp_data <- arrow::open_dataset(forecast_s3) |>
+  dplyr::filter(site_id == 'sunp',
+                reference_datetime ==  '2023-05-01 00:00:00',
+                variable == 'temperature') |>
+  collect()

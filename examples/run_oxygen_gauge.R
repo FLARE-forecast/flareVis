@@ -58,7 +58,7 @@ field_noon_oxy <- field_noon_oxy %>% dplyr::select(-location, -day, -minute, -ho
 # DO lower is at 10.5m
 # metadata on edi: https://portal.edirepository.org/nis/mapbrowse?packageid=edi.499.2
 
-depths <- c('1.5', '10.5')
+depths <- c('1.0', '10.0')
 
 oxy <- field_noon_oxy[,c(1, 2, 3, 5)]
 oxy$Depth <- 1.5
@@ -95,13 +95,13 @@ field_format_oxy <- field_format_oxy %>%
 
 oxy_value_sfc <- field_format_oxy %>%
   filter(DateTime == '2019-08-01',
-         Depth == 1.5) %>%
+         Depth == 10) %>%
   mutate(upper_bound = (DOSat + (DOSat*0.05)),
          lower_bound = (DOSat - (DOSat*0.05)))
 
 oxy_value_bottom <- field_format_oxy |>
   filter(DateTime == '2019-08-01',
-         Depth == 30) |>
+         Depth == 10) |>
   mutate(upper_bound = (DOSat + (DOSat*0.05)),
          lower_bound = (DOSat - (DOSat*0.05)))
 

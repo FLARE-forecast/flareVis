@@ -1,11 +1,19 @@
-#' @param forecast_data dataframe containing forecast data
+#' Anomaly plot for temperature
+#' @param data data frame to be plotted
+#' @param depths vector of depths to be facets
+#' @param tzone time zone for datetime in plot
+#' @param ylims vector of c(lower,upper) bounds of temperature on plot
 #' @param variable_name variable that is being forecasted
+#'
+#' @return
+#' @export
+#'
 
-flare_forecasts <- function(forecast_data, variable_name){
+flare_forecasts <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-4,4), variable_name= NA){
 
   if (variable_name == 'temperature'){
 
-    p <- ggplot(forecast_data, aes(x=datetime,y=prediction_f, group = parameter)) +
+    p <- ggplot(data, aes(x=datetime,y=prediction_f, group = parameter)) +
       geom_line() +
       ylab('Temperature (deg F)') +
       xlab('Date')
@@ -15,7 +23,7 @@ flare_forecasts <- function(forecast_data, variable_name){
 
   } else {
 
-    p <- ggplot(forecast_data, aes(x=datetime,y=prediction, group = parameter)) +
+    p <- ggplot(data, aes(x=datetime,y=prediction, group = parameter)) +
       geom_line()
   }
 

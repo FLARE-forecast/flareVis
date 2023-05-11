@@ -1,8 +1,20 @@
-thermocline_plot <- function(td_past, td_future){
+#' Thermocline plot
+#' @param td_observed observational data to be plotted
+#' @param td_forecast forecast data to be plotted
+#' @param depths vector of depths to be facets
+#' @param tzone time zone for datetime in plot
+#' @param ylims vector of c(lower,upper) bounds of temperature on plot
+#' @param variable_name variable that is being forecasted
+#'
+#' @return
+#' @export
+#'
 
-p <- ggplot(td_future, aes(DateTime,td_calc)) +
+thermocline_plot <- function(td_observed, td_forecast, depths = 0.5, tzone = "America/New_York", ylims = c(-4,4)){
+
+p <- ggplot(td_forecast, aes(DateTime,td_calc)) +
   geom_line() +
-  geom_point(data=td_past, aes(DateTime,td_calc)) +
+  geom_point(data=td_observed, aes(DateTime,td_calc)) +
   #ylim(c(0,100)) +
   #scale_y_reverse(limits = c(min(depth_calc),max(depth_calc))) +
   scale_y_reverse( lim=c(100,0)) +

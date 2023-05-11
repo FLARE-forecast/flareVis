@@ -1,6 +1,10 @@
-#' @param median median temperature value
+#' swimming suitability dial plot
+#' @param median median oxygen value
 #' @param q025 2.5% confidence value
 #' @param q975 97.5% confidence value
+#' @return
+#' @export
+#'
 
 temperature_index_gauge <- function(median, q025, q975){
   fig <- plot_ly(

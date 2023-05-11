@@ -1,6 +1,10 @@
-#' @param oxy_data dataframe containing oxygen saturation data. Should include DateTime, Depth, and DOSat
-#' @param plot_date date for the plot
-#' @param plot_depth depth for the plot
+#' Oxygen saturation dial plot
+#' @param median_oxy median oxygen value
+#' @param q025_oxy 2.5% confidence value
+#' @param q975_oxcy 97.5% confidence value
+#' @return
+#' @export
+#'
 
 oxygen_gauge <- function(median_oxy, q025_oxy, q975_oxy){
 
