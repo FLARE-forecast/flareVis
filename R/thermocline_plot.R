@@ -1,101 +1,24 @@
-library(tidyverse)
-library(remotes)
-
-remotes::install_github("eco4cast/score4cast")
-
-remotes::install_github('FLARE-forecast/FLAREr')
-
-# high frequency buoy data
-FLAREr::get_edi_file(edi_https = "https://pasta.lternet.edu/package/data/eml/edi/499/2/f4d3535cebd96715c872a7d3ca45c196",
-                     file = file.path("hist-data", "hist_buoy_do.csv"),
-                     lake_directory)#,
-#curl_timeout = 120)
-
-FLAREr::get_edi_file(edi_https = "https://pasta.lternet.edu/package/data/eml/edi/499/2/1f903796efc8d79e263a549f8b5aa8a6",
-                     file = file.path("hist-data", "hist_buoy_temp.csv"),
-                     lake_directory)#,
-
-
-field_all <- read_csv('data_raw/hist-data/hist_buoy_temp.csv')
-
-field_all$datetime <- as.POSIXct(field_all$datetime, format = "%Y-%m-%d %H:%M:%S")
-field_noon <- field_all %>%
-  dplyr::mutate(day = day(datetime)) %>%
-  dplyr::mutate(hour = hour(datetime)) %>%
-  dplyr::mutate(minute = minute(datetime))
-field_noon <- field_noon[field_noon$hour=='0' & field_noon$minute=='0',]
-field_noon <- field_noon[field_noon$location=='loon',]
-field_noon <- field_noon %>% dplyr::select(-location, -day, -minute, -hour)
-
-# add depth column and remove from column name
-field_format <- data.frame("DateTime" = as.Date(NA),
-                           "Depth" = NA,
-                           "Temp" = NA)
-
-depths <- c('0.5', '0.75', '0.85', '1.0', '1.5', '1.75', '1.85', '2.0', '2.5', '2.75',
-            '2.85', '3.0', '3.5', '3.75', '3.85', '4.5', '4.75', '4.85', '5.5', '5.75',
-            '5.85', '6.5', '6.75', '6.85', '7.5', '7.75', '7.85', '8.5', '8.75', '8.85',
-            '9.5', '9.75', '9.85', '10.5', '11.5', '13.5')
-
-for (i in 1:length(depths)) {
-  temp <- field_noon[,c(1, i+1)]
-  temp$Depth <- depths[i]
-  colnames(temp) <- c('DateTime', 'Temp', 'Depth')
-  field_format <- full_join(temp, field_format)
-}
-
-
-# put depth as second column
-field_format <- field_format %>% dplyr::select( 'DateTime', 'Depth', 'Temp') %>%
-  dplyr::arrange(DateTime, Depth)
-field_format <- na.omit(field_format)
-
-field_format$Depth <- as.numeric(field_format$Depth)
-# round depths to nearest integer for matching with DO
-for(i in 1:nrow(field_format)){
-  if(field_format$Depth[i] < 1){
-    field_format$Depth[i] <- 0.5
-  }else if(field_format$Depth[i]==1){
-    field_format$Depth[i] <- 1.0
-  }else if(field_format$Depth[i]==1.5){
-    field_format$Depth[i] <- field_format$Depth[i]
-  }else if(field_format$Depth[i] > 1 & field_format$Depth[i] < 2){
-    field_format$Depth[i] <- 1.5
-  }
-  else(field_format$Depth[i] <- ceiling(field_format$Depth[i]))
-}
-
-#field_format$Depth <- as.character(field_format$Depth)
-
-depth_calc <- sort(unique(as.numeric(field_format$Depth)), decreasing = FALSE)
-
-field_td_calc <- field_format %>%
-  distinct(DateTime, Depth, .keep_all = TRUE) %>%
-  group_by(DateTime) %>%
-  mutate(td_calc = thermo.depth(wtr = as.numeric(Temp), depths = as.numeric(Depth))) %>%
-  ungroup() %>%
-  distinct(DateTime, td_calc)
-
-field_td_calc$td_calc <- (field_td_calc$td_calc * 3.28084)
-
-td_future <- field_td_calc %>%
-  filter(DateTime > '2020-06-01',
-         DateTime < '2020-07-15')
-
-td_past <- field_td_calc %>%
-  filter(DateTime > '2020-06-01',
-         DateTime < '2020-06-10')
+thermocline_plot <- function(td_past, td_future){
 
 p <- ggplot(td_future, aes(DateTime,td_calc)) +
   geom_line() +
   geom_point(data=td_past, aes(DateTime,td_calc)) +
-  #ylim(c(min(depth_calc),max(depth_calc))) +
+  #ylim(c(0,100)) +
   #scale_y_reverse(limits = c(min(depth_calc),max(depth_calc))) +
-  scale_y_reverse() +
-  geom_vline(xintercept =  as.POSIXct('2020-06-10'), linetype = 'dashed')
+  scale_y_reverse( lim=c(100,0)) +
+  geom_vline(xintercept =  as.POSIXct('2020-06-10'), linetype = 'dashed') +
+  ylab('Lake Depth (ft)') +
+  xlab('Date') +
+  ggtitle('What Depth Is The Cold Layer?') +
+  annotate("text", x=as.POSIXct('2020-06-05'), y=15, label= "Past", size = 8) +
+  annotate("text", x=as.POSIXct('2020-06-16'), y=15, label= "Future", size = 8) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title.x = element_text(size=12)) +
+  theme(axis.title.y = element_text(size=12))
 
-p
+return(p)
 
+}
 
 
 
