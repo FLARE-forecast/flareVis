@@ -17,7 +17,7 @@ plot_temp <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(
   my_labels[which(!(my_breaks %in% my_label))] <- " "
   y_label <- expression(paste('Water temperature (',degree,'C)', sep = ""))
 
-  # Generate the pot
+  # Generate the plot
   data |>
     # Filter the data and get in the right format
     dplyr::filter(depth %in% depths) |>

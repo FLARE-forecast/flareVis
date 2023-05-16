@@ -1,0 +1,57 @@
+---
+title: "Data Visualization Intro"
+author: Austin Delany
+date: '2023-05-16'
+output: html_document
+---
+
+# Creating Visuals With R Functions
+
+## FlareVis GitHub Repository
+
+Repo for FLARE visualizations can be found at <https://github.com/FLARE-forecast/flareVis>
+
+## Forking the branch and cloning locally
+
+-   Go to <https://github.com/FLARE-forecast/flareVis> and fork the repository (create a copy on your github account)
+-   Click the green "code" button and copy the HTTPS link
+-   Go to your local Rstudio and create a new project (Version Control, Git, URL)
+
+## Create A visualization function
+
+```{r}
+example_plot <- function(data, depths, tzone, ylims){
+  
+      p <- ggplot(data, aes(x=datetime,y=prediction, group = parameter)) +
+      geom_line() +
+      ylab('Temperature (deg C)') +
+      xlab('Date')
+      ggtitle('FLARE Forecast Members') +
+      ylim(ylims) +  
+      theme_bw() +
+      theme(plot.title = element_text(hjust = 0.5))
+      
+      return(p)
+}
+```
+
+#Read in forecast data -- try to do as much filtering as possible before the collect() statement
+
+```{r, echo=FALSE}
+forecast_s3 <- arrow::s3_bucket('forecasts/parquet', endpoint_override = 's3.flare-forecast.org', anonymous = TRUE)
+
+sunp_data <- arrow::open_dataset(forecast_s3) |>
+  dplyr::filter(site_id == 'sunp',
+                reference_datetime ==  '2023-05-01 00:00:00',
+                variable == 'temperature',
+                depth == 1.0) |>
+  collect()
+```
+
+#Call function with data and display plot
+
+```{r}
+forecast_fig <- example_plot(sunp_data, depths = NULL, tzone = NULL, ylims = c(0,30))
+
+forecast_fig
+```
