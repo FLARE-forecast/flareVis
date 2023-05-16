@@ -117,3 +117,14 @@ oxy_gauge_fig_bottom <- oxygen_gauge(median_oxy = oxy_value_bottom$DOSat,
                               q975_oxy =  oxy_value_bottom$upper_bound)
 
 oxy_gauge_fig_bottom
+
+
+
+
+## test with bucket access
+forecast_s3 <- arrow::s3_bucket('forecasts/parquet', endpoint_override = 's3.flare-forecast.org', anonymous = TRUE)
+
+sunp_df <- arrow::open_dataset(forecast_s3) |>
+  dplyr::filter(site_id == 'sunp_oxy',
+                reference_datetime ==  '2023-05-09 00:00:00') |>
+  collect()

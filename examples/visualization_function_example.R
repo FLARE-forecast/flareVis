@@ -1,7 +1,7 @@
 library(tidyverse)
 library(arrow)
 
-example_plot <- function(data, depths, tzone, ylims){
+example_plot <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(0,20)){
 
   p <- ggplot(data, aes(x=datetime,y=prediction, group = parameter)) +
     geom_line() +
