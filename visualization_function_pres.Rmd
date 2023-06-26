@@ -38,11 +38,14 @@ example_plot <- function(data, depths, tzone, ylims){
 #Read in forecast data -- try to do as much filtering as possible before the collect() statement
 
 ```{r, echo=FALSE}
+library(tidyverse)
+library(arrow)
+
 forecast_s3 <- arrow::s3_bucket('forecasts/parquet', endpoint_override = 's3.flare-forecast.org', anonymous = TRUE)
 
 sunp_data <- arrow::open_dataset(forecast_s3) |>
   dplyr::filter(site_id == 'sunp',
-                reference_datetime ==  '2023-05-01 00:00:00',
+                reference_datetime ==  '2023-05-17 00:00:00',
                 variable == 'temperature',
                 depth == 1.0) |>
   collect()
