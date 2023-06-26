@@ -26,7 +26,7 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
     ggplot2::geom_ribbon(ggplot2::aes(ymin = forecast_lower_90, ymax = forecast_upper_90,
                                       fill = as.factor(depth)),
                          alpha = 0.2) +
-    ggplot2::geom_point(data = obs_hist, ggplot2::aes(y = value, color = as.factor(depth)), size = 2) +
+    ggplot2::geom_point(ggplot2::aes(y = observed, color = as.factor(depth)), size = 2) +
     ggplot2::geom_vline(aes(xintercept = as.Date(forecast_start_day),
                             linetype = "solid"),
                         alpha = 1) +
