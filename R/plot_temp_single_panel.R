@@ -9,7 +9,7 @@
 #' @return
 #' @export
 #'
-plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-5,35), site_name = ""){
+plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York", ylims = c(-5,35), site_name = "", obs_hist){
 
   # Fix dates and rename columns to match plotting code
   curr_tibble <- data |>
@@ -22,11 +22,13 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
 
   ggplot2::ggplot(curr_tibble, ggplot2::aes(x = as.Date(date))) +
     ggplot2::ylim(ylims) +
+    ggplot2::xlim(c(as.Date(min((curr_tibble$date)) - lubridate::days(5)), (as.Date(max(curr_tibble$date)) + lubridate::days(5)))) +
     ggplot2::geom_line(ggplot2::aes(y = forecast_mean, color = as.factor(depth)), size = 0.5)+
     ggplot2::geom_ribbon(ggplot2::aes(ymin = forecast_lower_90, ymax = forecast_upper_90,
                                       fill = as.factor(depth)),
                          alpha = 0.2) +
-    ggplot2::geom_point(ggplot2::aes(y = observed, color = as.factor(depth)), size = 2) +
+    ggplot2::geom_point(data = obs_hist, ggplot2::aes(x=as.Date(reference_datetime),y = observation, color = as.factor(depth)), size = 2) +
+    #ggplot2::geom_point(ggplot2::aes(y = observed, color = as.factor(depth)), size = 2) +
     ggplot2::geom_vline(aes(xintercept = as.Date(forecast_start_day),
                             linetype = "solid"),
                         alpha = 1) +
@@ -44,9 +46,9 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
                                 values = c("#D55E00", '#009E73', '#0072B2'),
                                 labels = as.character(depths)) +
     #labels = c('0.1', '5.0', '10.0')) +
-    ggplot2::scale_x_date(date_breaks = '4 days',
-                          date_labels = '%b %d\n%a',
-                          limits = c(as.Date(min(curr_tibble$date) - 1), as.Date(max(curr_tibble$date)))) +
+    # ggplot2::scale_x_date(date_breaks = '4 days',
+    #                       date_labels = '%b %d\n%a',
+    #                       limits = c(as.Date(min(curr_tibble$date) - 10), as.Date(max(curr_tibble$date)))) +
     #limits = c(as.Date(min(obs_hist$date)), as.Date(max(curr_tibble$date)))) +
     #limits = c(as.Date(config$run_config$start_datetime) - 1, as.Date(config$run_config$forecast_start_datetime) + num_days_plot)) +
     ggplot2::scale_linetype_manual(name = "",
