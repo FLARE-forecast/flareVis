@@ -35,8 +35,8 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
     #alpha = forecast_start_day_alpha) +
     #ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day - 2*24*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Past', geom = 'text') +
     #ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day + 3*24*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Future', geom = 'text') +
-    ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day - 24*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Past', geom = 'text') +
-    ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day + 24*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Future', geom = 'text') +
+    ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day - 48*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Past', geom = 'text') +
+    ggplot2::annotate(x = as.Date(curr_tibble$forecast_start_day + 48*60*60), y = max(curr_tibble$forecast_upper_90), label = 'Future', geom = 'text') +
     ggplot2::theme_light() +
     ggplot2::scale_fill_manual(name = "Depth (m)",
                                values = c("#D55E00", '#009E73', '#0072B2'),
@@ -61,8 +61,9 @@ plot_temp_single_panel <- function(data, depths = 0.5, tzone = "America/New_York
                   y = "Temperature (°C)", #state_names[i],
                   fill = 'Depth (m)',
                   color = 'Depth',
-                  title = paste0(site_name," water temperature forecast, ", lubridate::date(curr_tibble$forecast_start_day)),
-                  caption = 'Points represent sensor observations of water temperature. Lines represents the mean prediction from the forecast ensembles, or the most likely outcome.\n The shaded areas represent the 90% confidence interval of the forecast, or the possible range of outcomes based on the forecast.') +
+                  title = paste0(site_name," water temperature forecast, ", lubridate::date(curr_tibble$forecast_start_day))) +#,
+                  #caption = 'Points represent sensor observations of water temperature. Lines represents the mean prediction from the forecast ensembles, or the most likely outcome.\n The shaded areas represent the 90% confidence interval of the forecast, or the possible range of outcomes based on the forecast.') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 10),
-                   plot.title = element_text(size = 16))
+                   plot.title = element_text(size = 16))#,
+                   #aspect.ratio=2/3)
 }
